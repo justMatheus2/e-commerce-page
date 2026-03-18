@@ -1,6 +1,6 @@
 # Nova Electronics Storefront
 
-A dark-mode e-commerce storefront built with React, Vite, and TypeScript. The app includes a responsive product grid, a mobile filter drawer, a cart modal with shipping rules, and a footer with store contact details and social links.
+A dark-mode e-commerce storefront built with React, Vite, and TypeScript. The app includes a responsive product grid, a mobile filter drawer, a cart modal, with shipping rules, and a footer with store contact details and social links.
 
 ## Tech Stack
 
