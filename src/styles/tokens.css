@@ -1,0 +1,23 @@
+:root {
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  color: #f3f7ff;
+  background:
+    radial-gradient(circle at top left, rgba(0, 217, 255, 0.18), transparent 24%),
+    radial-gradient(circle at right top, rgba(0, 102, 255, 0.14), transparent 18%),
+    linear-gradient(180deg, #08111f 0%, #0d1524 50%, #060b14 100%);
+  color-scheme: dark;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  --bg: #08111f;
+  --panel: rgba(17, 27, 43, 0.86);
+  --panel-strong: #101a2b;
+  --panel-soft: #152338;
+  --line: rgba(142, 167, 198, 0.16);
+  --text: #edf4ff;
+  --muted: #8ea7c6;
+  --accent: #12d7ff;
+  --accent-strong: #08a8ff;
+  --shadow: 0 16px 48px rgba(0, 0, 0, 0.28);
+}

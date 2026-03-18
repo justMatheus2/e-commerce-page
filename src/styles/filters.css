@@ -1,0 +1,124 @@
+.mobile-filter-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.65rem;
+  width: fit-content;
+  padding: 0.85rem 1rem;
+  border-radius: 16px;
+  background: var(--panel);
+  color: var(--text);
+}
+
+.drawer-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 10;
+  background: rgba(4, 10, 18, 0.68);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 180ms ease;
+}
+
+.drawer-backdrop.visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+.filter-panel {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 11;
+  display: grid;
+  align-content: start;
+  gap: 1.75rem;
+  width: min(86vw, 320px);
+  height: 100vh;
+  padding: 1.25rem;
+  border-radius: 0 24px 24px 0;
+  background: rgba(9, 15, 27, 0.97);
+  transform: translateX(-102%);
+  transition: transform 220ms ease;
+}
+
+.filter-panel.open {
+  transform: translateX(0);
+}
+input[type='range'] {
+  width: 100%;
+  accent-color: var(--accent);
+}
+
+.price-range {
+  display: flex;
+  justify-content: space-between;
+  color: var(--muted);
+  font-size: 0.92rem;
+}
+
+@media (min-width: 960px) {
+  .mobile-filter-button,
+  .drawer-backdrop,
+  .close-drawer {
+    display: none;
+  }
+
+  .filter-panel {
+    position: sticky;
+    top: 1.5rem;
+    width: 100%;
+    height: auto;
+    border-radius: 28px;
+    background: rgba(11, 18, 31, 0.8);
+    transform: none;
+  }
+}
+.filter-panel-header,
+.price-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.filter-panel h2 {
+  margin: 0;
+}
+
+.icon-button {
+  display: inline-grid;
+  place-items: center;
+  width: 2.4rem;
+  height: 2.4rem;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--text);
+}
+.filter-section {
+  display: grid;
+  gap: 1rem;
+}
+
+.filter-section h3,
+.price-header span {
+  margin: 0;
+  color: var(--muted);
+}
+
+.chip-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+}
+
+.chip {
+  padding: 0.7rem 0.95rem;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--text);
+}
+
+.chip.active {
+  background: linear-gradient(135deg, var(--accent), var(--accent-strong));
+  color: #03111d;
+  font-weight: 700;
+}
