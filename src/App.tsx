@@ -12,6 +12,10 @@ const categories: Category[] = ['All', 'Headphones', 'Speakers', 'Wearables', 'A
 const maxPrice = 350;
 const shippingThreshold = 300;
 const shippingFee = 30;
+const currencyFormatter = new Intl.NumberFormat('en-US', {
+  style: 'currency',
+  currency: 'USD',
+});
 
 function App() {
   const [selectedCategory, setSelectedCategory] = useState<Category>('All');
@@ -20,6 +24,28 @@ function App() {
   const [cartItems, setCartItems] = useState<number[]>([]);
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
   const [cartOpen, setCartOpen] = useState(false);
+  const [lastAddedProductId, setLastAddedProductId] = useState<number | null>(null);
+
+  const addToCart = (productId: number) => {
+    setCartItems((current) => [...current, productId]);
+    setLastAddedProductId(productId);
+  };
+
+  const decrementCartItem = (productId: number) => {
+    setCartItems((current) => {
+      const index = current.indexOf(productId);
+
+      if (index === -1) {
+        return current;
+      }
+
+      return current.filter((_, itemIndex) => itemIndex !== index);
+    });
+  };
+
+  const removeCartItem = (productId: number) => {
+    setCartItems((current) => current.filter((itemId) => itemId !== productId));
+  };
 
   const filteredProducts = useMemo(() => {
     return products.filter((product) => {
@@ -55,6 +81,28 @@ function App() {
   }, [cartLines]);
 
   const hasFreeShipping = subtotal > shippingThreshold;
+  const appliedShippingFee = cartLines.length === 0 || hasFreeShipping ? 0 : shippingFee;
+  const orderTotal = subtotal + appliedShippingFee;
+  const lastAddedProduct = useMemo(() => {
+    if (lastAddedProductId === null) {
+      return null;
+    }
+
+    return products.find((product) => product.id === lastAddedProductId) ?? null;
+  }, [lastAddedProductId]);
+
+  useEffect(() => {
+    if (lastAddedProductId === null) {
+      return undefined;
+    }
+
+    const timeoutId = window.setTimeout(() => {
+      setLastAddedProductId(null);
+    }, 2400);
+
+
+    return () => window.clearTimeout(timeoutId);
+  }, [lastAddedProductId]);
 
   useEffect(() => {
     const closeOnEscape = (event: KeyboardEvent) => {
@@ -88,8 +136,12 @@ function App() {
         isOpen={cartOpen}
         items={cartLines}
         subtotal={subtotal}
-        shippingFee={shippingFee}
+        shippingFee={appliedShippingFee}
+        orderTotal={orderTotal}
         hasFreeShipping={hasFreeShipping}
+        onAddItem={addToCart}
+        onDecreaseItem={decrementCartItem}
+        onRemoveItem={removeCartItem}
         onClose={() => setCartOpen(false)}
       />
 
@@ -129,7 +181,7 @@ function App() {
               <ProductCard
                 key={product.id}
                 product={product}
-                onAddToCart={(productId) => setCartItems((current) => [...current, productId])}
+                onAddToCart={addToCart}
               />
             ))}
           </div>
@@ -144,6 +196,15 @@ function App() {
       </main>
 
       <Footer />
+
+      {lastAddedProduct ? (
+        <div className="cart-toast" role="status" aria-live="polite">
+          <strong>Added to cart</strong>
+          <span>
+            {lastAddedProduct.title} · {currencyFormatter.format(lastAddedProduct.price)}
+          </span>
+        </div>
+      ) : null}
     </div>
   );
 }

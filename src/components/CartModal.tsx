@@ -11,16 +11,29 @@ type CartModalProps = {
   items: CartLine[];
   subtotal: number;
   shippingFee: number;
+  orderTotal: number;
   hasFreeShipping: boolean;
+  onAddItem: (productId: number) => void;
+  onDecreaseItem: (productId: number) => void;
+  onRemoveItem: (productId: number) => void;
   onClose: () => void;
 };
+
+const currencyFormatter = new Intl.NumberFormat('en-US', {
+  style: 'currency',
+  currency: 'USD',
+});
 
 export function CartModal({
   isOpen,
   items,
   subtotal,
   shippingFee,
+  orderTotal,
   hasFreeShipping,
+  onAddItem,
+  onDecreaseItem,
+  onRemoveItem,
   onClose,
 }: CartModalProps) {
   if (!isOpen) {
@@ -52,26 +65,45 @@ export function CartModal({
                   <div className="cart-item-copy">
                     <h3>{product.title}</h3>
                     <p>Qty: {quantity}</p>
+                    <small>{currencyFormatter.format(product.price)} each</small>
                   </div>
-                  <strong>${product.price * quantity}</strong>
+                  <strong>{currencyFormatter.format(product.price * quantity)}</strong>
+
+                  <div className="cart-item-actions">
+                    <button className="cart-item-action" type="button" onClick={() => onDecreaseItem(product.id)}>
+                      -
+                    </button>
+                    <button className="cart-item-action" type="button" onClick={() => onAddItem(product.id)}>
+                      +
+                    </button>
+                    <button className="cart-item-action cart-item-remove" type="button" onClick={() => onRemoveItem(product.id)}>
+                      Remove
+                    </button>
+                  </div>
                 </article>
               ))}
             </div>
 
             <div className="cart-summary">
-              <div className="cart-summary-row">
-                <span>Total</span>
-                <strong>${subtotal}</strong>
-              </div>
-              <p className={`shipping-note ${hasFreeShipping ? 'free' : ''}`}>
-                {hasFreeShipping ? 'Free shipping' : '$30 shipping fee'}
-              </p>
-              {!hasFreeShipping ? (
+              <div className="cart-receipt">
+                <div className="cart-summary-row">
+                  <span>Items subtotal</span>
+                  <strong>{currencyFormatter.format(subtotal)}</strong>
+                </div>
                 <div className="cart-summary-row shipping-row">
                   <span>Shipping</span>
-                  <strong>${shippingFee}</strong>
+                  <strong>{currencyFormatter.format(shippingFee)}</strong>
                 </div>
-              ) : null}
+                <div className="cart-summary-row cart-total-row">
+                  <span>Total</span>
+                  <strong>{currencyFormatter.format(orderTotal)}</strong>
+                </div>
+              </div>
+
+              <p className={`shipping-note ${hasFreeShipping ? 'free' : ''}`}>
+                {hasFreeShipping ? 'Shipping applied as a free item in the receipt.' : 'Shipping is being calculated together with your order total.'}
+              </p>
+
               <button className="buy-now-button" type="button">
                 Buy Now
               </button>
